@@ -395,13 +395,42 @@ function App() {
                 backgroundSize: '100% 100%',
                 position: 'relative'
             }}>
-                <div className="shared-text" style={{top: '19px', left: '640px'}}>
-                    <label><input type="radio" name="choice" value="1" checked={formData.type == 0}/></label><br/>
-                    <label><input type="radio" name="choice" value="2" checked={formData.type == 1}/></label><br/>
-                    <label><input type="radio" name="choice" value="3" checked={formData.type == 2}/></label><br/>
-                    <label><input type="radio" name="choice" value="4" checked={formData.type == 3}/></label><br/>
-                    <label><input type="radio" name="choice" value="5" checked={formData.type == 4}/></label>
+                <div
+                className="shared-text"
+                style={{
+                    position: 'absolute',
+                    top: '15px',
+                    left: '550px',
+                    width: '120px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px',
+                    fontSize: '14px',
+                    color: 'black'
+                }}
+                >
+                <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    Rig Up
+                    <input type="radio" name="choice" value="1" checked={formData.type === 0} />
+                </label>
+                <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    Rig Out
+                    <input type="radio" name="choice" value="2" checked={formData.type === 1} />
+                </label>
+                <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    Rig Move
+                    <input type="radio" name="choice" value="3" checked={formData.type === 2} />
+                </label>
+                <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    Repair
+                    <input type="radio" name="choice" value="4" checked={formData.type === 3} />
+                </label>
+                <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    Service/Check
+                    <input type="radio" name="choice" value="5" checked={formData.type === 4} />
+                </label>
                 </div>
+
 
                 <br/>
 
