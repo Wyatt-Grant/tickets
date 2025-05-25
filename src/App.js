@@ -114,6 +114,7 @@ function App() {
                         className="mr-2"
                     />
                     {option}
+                    <br/>
                     </label>
                 ))}
 
@@ -231,6 +232,7 @@ function App() {
                 {(formData.lights || formData.generator) &&
                 <>
                     <input name="gen_hours" placeholder="Generator Hours" value={formData.gen_hours} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
+                    <br/>
                     <label><input type="checkbox" name="gen_maint_complete" placeholder="" value={formData.gen_maint_complete} onChange={handleChange} className="w-full shared-input p-2 border rounded" /> Gen Maintenance Completed</label>
                 </>}
 
@@ -249,6 +251,7 @@ function App() {
                     <input name="doghouse_phones" placeholder="# of Doghouse Phones" value={formData.doghouse_phones} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
                     <input name="shack_phones" placeholder="# of Shack Phones" value={formData.shack_phones} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
                     <input name="total_lines" placeholder="Total Lines" value={formData.total_lines} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
+                    <br/>
                     <label><input type="checkbox" name="lines_tested_YN" placeholder="All Lines Tested (Y/N)" value={formData.lines_tested_YN} onChange={handleChange} className="w-full shared-input p-2 border rounded" />All Lines Tested</label>
                 </>}
 
@@ -276,6 +279,7 @@ function App() {
                     <input name="outdoor_APs" placeholder="# of Outdoor AP's" value={formData.outdoor_APs} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
                     <input name="indoor_APs" placeholder="# of Indoor AP's" value={formData.indoor_APs} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
                     <input name="wifi_APs" placeholder="# of AP's w/ WIFI" value={formData.wifi_APs} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
+                    <br/>
                     <label><input type="checkbox" name="devices_tested_YN" placeholder="All Devices Tested (Y/N)" value={formData.devices_tested_YN} onChange={handleChange} className="w-full shared-input p-2 border rounded" />All Devices Tested</label>
                 </>}
 
