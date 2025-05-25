@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+.shared-text {
+    position: absolute;
+    width: 100px;
+    text-align: left;
+    display: inline-block;
+    color: rgb(0, 0, 149);
+}
+
+.shared-input {
+    margin-right: 10px;
+}
+
+h2 {
+    line-height: 0px;
+}
