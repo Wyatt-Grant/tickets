@@ -91,7 +91,12 @@ function App() {
 
     const handleClick = () => {
         var element = document.getElementById('pdf-container');
-        html2pdf(element);
+
+        const today = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Edmonton' };
+        const formatted = today.toLocaleDateString('en-US', options);
+
+        html2pdf(element).save(formatted+'-'+formData.empNo+'-'+formData.site+'-'+formData.ImNo+'-ticket.pdf');
     };
 
     const today = new Date();
