@@ -39,10 +39,11 @@
 
 .shared-text {
     position: absolute;
-    width: 100px;
+    width: 200px;
     text-align: left;
     display: inline-block;
     color: rgb(0, 0, 149);
+    text-wrap: balance;
 }
 
 .shared-input {
