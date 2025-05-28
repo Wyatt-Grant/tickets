@@ -1,7 +1,7 @@
 import ticketScan from './ticket_scan.png';
 import './App.css';
 import html2pdf from 'html2pdf.js/dist/html2pdf.min.js';
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import SignatureCanvas from 'react-signature-canvas'
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
         email: "",
         phone: "",
         contact: "",
-        milage: 0,
+        milage: "",
         milage_rate: 1.60,
         labor_cost: 800,
         AWC_kits: '',
@@ -88,8 +88,6 @@ function App() {
         return num.toFixed(2);
     }
 
-
-
     const handleClick = () => {
         var element = document.getElementById('pdf-container');
 
@@ -104,295 +102,587 @@ function App() {
     const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Edmonton' };
     const formatted = today.toLocaleDateString('en-US', options);
 
+    const sigCanvas = useRef(null);
+    const duplicateCanvas = useRef(null);
+
+    const handleStrokeEnd = () => {
+        if (sigCanvas.current && duplicateCanvas.current) {
+        const data = sigCanvas.current.toDataURL();
+        duplicateCanvas.current.fromDataURL(data);
+        }
+    };
+
     return (
         <>
             <form className="max-w-md mx-auto p-4 bg-white rounded-2xl shadow-md space-y-4">
-                <h2 className="text-xl font-semibold text-center">General</h2>
+                <h2>General</h2>
 
                 {["Rig Up", "Rig Out", "Rig Move", "Repair", "Service/Check"].map((option, index) => (
-                    <label style={{paddingRight: '30px'}} key={index} className="block">
+                <label style={{ paddingRight: '30px' }} key={index}>
                     <input
-                        type="radio"
-                        name="type"
-                        value={index}
-                        checked={formData.type == index}
-                        onChange={handleChange}
-                        className="mr-2"
+                    type="radio"
+                    name="type"
+                    value={index}
+                    checked={formData.type == index}
+                    onChange={handleChange}
                     />
                     {option}
-                    <br/>
-                    </label>
+                    <br />
+                </label>
                 ))}
 
-                <br/>
+                <br />
 
                 <input
-                    type="text"
-                    name="ImNo"
-                    placeholder="IM No"
-                    value={formData.ImNo}
-                    onChange={handleChange}
-                    className="w-full shared-input p-2 border rounded"
+                type="text"
+                className='shared-input'
+                name="ImNo"
+                placeholder="IM No"
+                value={formData.ImNo}
+                onChange={handleChange}
                 />
                 <input
-                    type="text"
-                    name="site"
-                    placeholder="Site"
-                    value={formData.site}
-                    onChange={handleChange}
-                    className="w-full shared-input p-2 border rounded"
+                type="text"
+                className='shared-input'
+                name="site"
+                placeholder="Site"
+                value={formData.site}
+                onChange={handleChange}
                 />
                 <input
-                    type="text"
-                    name="empNo"
-                    placeholder="Emp No"
-                    value={formData.empNo}
-                    onChange={handleChange}
-                    className="w-full shared-input p-2 border rounded"
+                type="text"
+                className='shared-input'
+                name="empNo"
+                placeholder="Emp No"
+                value={formData.empNo}
+                onChange={handleChange}
                 />
-                <h2 className="text-xl font-semibold text-center">Contact</h2>
+
+                <h2>Contact</h2>
                 <input
-                    type="text"
-                    name="contact"
-                    placeholder="Contact"
-                    value={formData.contact}
-                    onChange={handleChange}
-                    className="w-full shared-input p-2 border rounded"
-                />
-                <input
-                    type="tel"
-                    name="phone"
-                    placeholder="Phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="w-full shared-input p-2 border rounded"
+                type="text"
+                className='shared-input'
+                name="contact"
+                placeholder="Contact"
+                value={formData.contact}
+                onChange={handleChange}
                 />
                 <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full shared-input p-2 border rounded"
-                />
-                <h2 className="text-xl font-semibold text-center">Billing</h2>
-                <input
-                    type="text"
-                    name="milage"
-                    placeholder="Milage"
-                    value={formData.milage}
-                    onChange={handleChange}
-                    className="w-full shared-input p-2 border rounded"
+                type="tel"
+                className='shared-input'
+                name="phone"
+                placeholder="Phone"
+                value={formData.phone}
+                onChange={handleChange}
                 />
                 <input
-                    type="text"
-                    name="milage_rate"
-                    placeholder="Milage Rate"
-                    value={formData.milage_rate}
-                    onChange={handleChange}
-                    className="w-full shared-input p-2 border rounded"
+                type="email"
+                className='shared-input'
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                />
+
+                <h2>Billing</h2>
+                <input
+                type="text"
+                className='shared-input'
+                name="milage"
+                placeholder="Milage"
+                value={formData.milage}
+                onChange={handleChange}
                 />
                 <input
-                    type="text"
-                    name="labor_cost"
-                    placeholder="Labor Cost"
-                    value={formData.labor_cost}
-                    onChange={handleChange}
-                    className="w-full shared-input p-2 border rounded"
+                type="text"
+                className='shared-input'
+                name="milage_rate"
+                placeholder="Milage Rate"
+                value={formData.milage_rate}
+                onChange={handleChange}
+                />
+                <input
+                type="text"
+                className='shared-input'
+                name="labor_cost"
+                placeholder="Labor Cost"
+                value={formData.labor_cost}
+                onChange={handleChange}
                 />
 
                 <label>
-                <h2 className="text-xl font-semibold text-center">
-                <input
+                <h2>
+                    <input
                     type="checkbox"
                     name="cameras"
                     checked={formData.cameras}
                     onChange={handleChange}
+                    />
+                    Cameras
+                </h2>
+                </label>
+                {formData.cameras && (
+                <>
+                    <input
+                    name="AWC_kits"
+                    className='shared-input'
+                    placeholder="# of AWC Kits"
+                    value={formData.AWC_kits}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="ptz"
+                    className='shared-input'
+                    placeholder="# of PTZ's"
+                    value={formData.ptz}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="stationaries"
+                    className='shared-input'
+                    placeholder="# of Stationaries"
+                    value={formData.stationaries}
+                    onChange={handleChange}
+                    />
+                </>
+                )}
+
+                <label>
+                <h2>
+                    <input
+                    type="checkbox"
+                    name="generator"
+                    checked={formData.generator}
+                    onChange={handleChange}
+                    />
+                    Generator
+                </h2>
+                </label>
+                <label>
+                <h2>
+                    <input
+                    type="checkbox"
+                    name="lights"
+                    checked={formData.lights}
+                    onChange={handleChange}
+                    />
+                    Lights
+                </h2>
+                </label>
+                {(formData.lights || formData.generator) && (
+                <>
+                    <input
+                    name="gen_hours"
+                    className='shared-input'
+                    placeholder="Generator Hours"
+                    value={formData.gen_hours}
+                    onChange={handleChange}
+                    />
+                    <br />
+                    <label>
+                    <input
+                        type="checkbox"
+                        name="gen_maint_complete"
+                        value={formData.gen_maint_complete}
+                        onChange={handleChange}
+                    />
+                    Gen Maintenance Completed
+                    </label>
+                </>
+                )}
+
+                <label>
+                <h2>
+                    <input
+                    type="checkbox"
+                    name="rigphones"
+                    checked={formData.rigphones}
+                    onChange={handleChange}
+                    />
+                    Rig Phones
+                </h2>
+                </label>
+                {formData.rigphones && (
+                <>
+                    <input
+                    name="AWP_kits"
+                    className='shared-input'
+                    placeholder="# of AWP Kits"
+                    value={formData.AWP_kits}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="doghouse_phones"
+                    className='shared-input'
+                    placeholder="# of Doghouse Phones"
+                    value={formData.doghouse_phones}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="shack_phones"
+                    className='shared-input'
+                    placeholder="# of Shack Phones"
+                    value={formData.shack_phones}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="total_lines"
+                    className='shared-input'
+                    placeholder="Total Lines"
+                    value={formData.total_lines}
+                    onChange={handleChange}
+                    />
+                    <br />
+                    <label>
+                    <input
+                        type="checkbox"
+                        name="lines_tested_YN"
+                        value={formData.lines_tested_YN}
+                        onChange={handleChange}
+                    />
+                    All Lines Tested
+                    </label>
+                </>
+                )}
+
+                <label>
+                <h2>
+                    <input
+                    type="checkbox"
+                    name="wifi"
+                    checked={formData.wifi}
+                    onChange={handleChange}
+                    />
+                    Wifi
+                </h2>
+                </label>
+                <label>
+                <h2>
+                    <input
+                    type="checkbox"
+                    name="intercom"
+                    checked={formData.intercom}
+                    onChange={handleChange}
+                    />
+                    Intercom
+                </h2>
+                </label>
+                {(formData.intercom || formData.wifi) && (
+                <>
+                    <input
+                    name="primary_kit"
+                    className='shared-input'
+                    placeholder="Primary Kit"
+                    value={formData.primary_kit}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="outdoor_APs"
+                    className='shared-input'
+                    placeholder="# of Outdoor AP's"
+                    value={formData.outdoor_APs}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="indoor_APs"
+                    className='shared-input'
+                    placeholder="# of Indoor AP's"
+                    value={formData.indoor_APs}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="wifi_APs"
+                    className='shared-input'
+                    placeholder="# of AP's w/ WIFI"
+                    value={formData.wifi_APs}
+                    onChange={handleChange}
+                    />
+                    <br />
+                    <label>
+                    <input
+                        type="checkbox"
+                        name="devices_tested_YN"
+                        value={formData.devices_tested_YN}
+                        onChange={handleChange}
+                    />
+                    All Devices Tested
+                    </label>
+                </>
+                )}
+
+                <label>
+                <h2>
+                    <input
+                    type="checkbox"
+                    name="radios"
+                    checked={formData.radios}
+                    onChange={handleChange}
+                    />
+                    Radios
+                </h2>
+                </label>
+                {formData.radios && (
+                <>
+                    <input
+                    name="portable"
+                    placeholder="# of Portable"
+                    className='shared-input'
+                    value={formData.portable}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="batteries"
+                    placeholder="# of Batteries"
+                    className='shared-input'
+                    value={formData.batteries}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="truck_shack"
+                    placeholder="# of Truck/Shack"
+                    className='shared-input'
+                    value={formData.truck_shack}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="chargers"
+                    placeholder="# of Chargers"
+                    className='shared-input'
+                    value={formData.chargers}
+                    onChange={handleChange}
+                    />
+                </>
+                )}
+
+                <label>
+                <h2>
+                    <input
+                    type="checkbox"
+                    name="callrepeater"
+                    checked={formData.callrepeater}
+                    onChange={handleChange}
+                    />
+                    Cell Repeater
+                </h2>
+                </label>
+                <label>
+                <h2>
+                    <input
+                    type="checkbox"
+                    name="rig"
+                    checked={formData.rig}
+                    onChange={handleChange}
+                    />
+                    Rig
+                </h2>
+                </label>
+                <label>
+                <h2>
+                    <input
+                    type="checkbox"
+                    name="tower"
+                    checked={formData.tower}
+                    onChange={handleChange}
+                    />
+                    Tower
+                </h2>
+                </label>
+                {(formData.callrepeater || formData.rig || formData.tower) && (
+                <>
+                    <label>
+                    <input
+                        type="checkbox"
+                        name="monitored_YN"
+                        value={formData.monitored_YN}
+                        onChange={handleChange}
+                    />
+                    Monitored
+                    </label>
+                    <br />
+                    <input
+                    name="lsd"
+                    className='shared-input'
+                    placeholder="Surface LSD"
+                    value={formData.lsd}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="donor_azimuth"
+                    className='shared-input'
+                    placeholder="Donor Azimuth"
+                    value={formData.donor_azimuth}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="area_fill_azimuth"
+                    className='shared-input'
+                    placeholder="Area Fill Azimuth"
+                    value={formData.area_fill_azimuth}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="cell_frequency"
+                    className='shared-input'
+                    placeholder="Cell Frequency (850/1960)"
+                    value={formData.cell_frequency}
+                    onChange={handleChange}
+                    />
+                    <br />
+                    <input
+                    name="uplink"
+                    placeholder="Uplink (dB)"
+                    className='shared-input'
+                    value={formData.uplink}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="downlink"
+                    placeholder="Downlink (dB)"
+                    className='shared-input'
+                    value={formData.downlink}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="rssi_inside"
+                    placeholder="RSSI Inside (dBm)"
+                    className='shared-input'
+                    value={formData.rssi_inside}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="rssi_outside"
+                    placeholder="RSSI Outside (dBm)"
+                    className='shared-input'
+                    value={formData.rssi_outside}
+                    onChange={handleChange}
+                    />
+                    <input
+                    name="shack_boosters"
+                    placeholder="# of Shack Boosters"
+                    className='shared-input'
+                    value={formData.shack_boosters}
+                    onChange={handleChange}
+                    />
+                </>
+                )}
+
+                <label>
+                <h2>
+                    <input
+                    type="checkbox"
+                    name="hotshot"
+                    checked={formData.hotshot}
+                    onChange={handleChange}
+                    />
+                    Hotshot
+                </h2>
+                </label>
+                <label>
+                <h2>
+                    <input
+                    type="checkbox"
+                    name="laptoppackage"
+                    checked={formData.laptoppackage}
+                    onChange={handleChange}
+                    />
+                    Laptop Package
+                </h2>
+                </label>
+                {(formData.hotshot || formData.laptoppackage) && (
+                <>
+                    <label>
+                    <input
+                        type="checkbox"
+                        name="pkg_picked_up"
+                        value={formData.pkg_picked_up}
+                        onChange={handleChange}
+                    />
+                    Pkg Picked Up
+                    </label>
+                    <br />
+                    <label>
+                    <input
+                        type="checkbox"
+                        name="pkg_scanned_truck"
+                        value={formData.pkg_scanned_truck}
+                        onChange={handleChange}
+                    />
+                    Pkg Scanned to Truck
+                    </label>
+                    <br />
+                    <label>
+                    <input
+                        type="checkbox"
+                        name="pkg_scanned_emp"
+                        value={formData.pkg_scanned_emp}
+                        onChange={handleChange}
+                    />
+                    Pkg Scanned to EmpNo
+                    </label>
+                    <br />
+                    <label>
+                    <input
+                        type="checkbox"
+                        name="pkg_delivered"
+                        value={formData.pkg_delivered}
+                        onChange={handleChange}
+                    />
+                    Pkg Delivered
+                    </label>
+                    <br />
+                    <label>
+                    <input
+                        type="checkbox"
+                        name="pkg_set_up"
+                        value={formData.pkg_set_up}
+                        onChange={handleChange}
+                    />
+                    Pkg Set Up
+                    </label>
+                </>
+                )}
+
+                <h2>Notes</h2>
+                <textarea
+                name="notes"
+                className='shared-input'
+                placeholder="Notes"
+                style={{ width: '100%', height: '123px' }}
+                value={formData.notes}
+                onChange={handleChange}
                 />
-                Cameras</h2></label>
-                {formData.cameras &&
-                <>
-                    <input name="AWC_kits" placeholder="# of AWC Kits" value={formData.AWC_kits} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="ptz" placeholder="# of PTZ's" value={formData.ptz} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="stationaries" placeholder="# of Stationaries" value={formData.stationaries} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                </>}
 
-                <label>
-                <h2 className="text-xl font-semibold text-center">
-                    <input
-                        type="checkbox"
-                        name="generator"
-                        checked={formData.generator}
-                        onChange={handleChange}
-                    />    
-                Generator</h2></label>
-                <label>
-                <h2 className="text-xl font-semibold text-center">
-                    <input
-                        type="checkbox"
-                        name="lights"
-                        checked={formData.lights}
-                        onChange={handleChange}
-                    />    
-                Lights</h2></label>
-                {(formData.lights || formData.generator) &&
-                <>
-                    <input name="gen_hours" placeholder="Generator Hours" value={formData.gen_hours} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <br/>
-                    <label><input type="checkbox" name="gen_maint_complete" placeholder="" value={formData.gen_maint_complete} onChange={handleChange} className="w-full shared-input p-2 border rounded" /> Gen Maintenance Completed</label>
-                </>}
+                <h2>Completed By</h2>
+                <input
+                name="completed_by"
+                className='shared-input'
+                placeholder="Completed By"
+                value={formData.completed_by}
+                onChange={handleChange}
+                />
+                <input
+                name="ticket_no"
+                placeholder="Ticket #"
+                className='shared-input'
+                value={formData.ticket_no}
+                onChange={handleChange}
+                />
 
-                <label>
-                <h2 className="text-xl font-semibold text-center">
-                    <input
-                        type="checkbox"
-                        name="rigphones"
-                        checked={formData.rigphones}
-                        onChange={handleChange}
-                    />    
-                Rig Phones</h2></label>
-                {formData.rigphones &&
-                <>
-                    <input name="AWP_kits" placeholder="# of AWP Kits" value={formData.AWP_kits} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="doghouse_phones" placeholder="# of Doghouse Phones" value={formData.doghouse_phones} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="shack_phones" placeholder="# of Shack Phones" value={formData.shack_phones} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="total_lines" placeholder="Total Lines" value={formData.total_lines} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <br/>
-                    <label><input type="checkbox" name="lines_tested_YN" placeholder="All Lines Tested (Y/N)" value={formData.lines_tested_YN} onChange={handleChange} className="w-full shared-input p-2 border rounded" />All Lines Tested</label>
-                </>}
-
-                <label>
-                <h2 className="text-xl font-semibold text-center">
-                    <input
-                        type="checkbox"
-                        name="wifi"
-                        checked={formData.wifi}
-                        onChange={handleChange}
-                    />    
-                Wifi</h2></label>
-                <label>
-                <h2 className="text-xl font-semibold text-center">
-                    <input
-                        type="checkbox"
-                        name="intercom"
-                        checked={formData.intercom}
-                        onChange={handleChange}
-                    />    
-                Intercom</h2></label>
-                {(formData.intercom || formData.wifi) &&
-                <>
-                    <input name="primary_kit" placeholder="Primary Kit" value={formData.primary_kit} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="outdoor_APs" placeholder="# of Outdoor AP's" value={formData.outdoor_APs} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="indoor_APs" placeholder="# of Indoor AP's" value={formData.indoor_APs} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="wifi_APs" placeholder="# of AP's w/ WIFI" value={formData.wifi_APs} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <br/>
-                    <label><input type="checkbox" name="devices_tested_YN" placeholder="All Devices Tested (Y/N)" value={formData.devices_tested_YN} onChange={handleChange} className="w-full shared-input p-2 border rounded" />All Devices Tested</label>
-                </>}
-
-                <label>
-                <h2 className="text-xl font-semibold text-center">
-                    <input
-                        type="checkbox"
-                        name="radios"
-                        checked={formData.radios}
-                        onChange={handleChange}
-                    />    
-                Radios</h2></label>
-                {formData.radios &&
-                <>
-                    <input name="portable" placeholder="# of Portable" value={formData.portable} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="batteries" placeholder="# of Batteries" value={formData.batteries} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="truck_shack" placeholder="# of Truck/Shack" value={formData.truck_shack} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="chargers" placeholder="# of Chargers" value={formData.chargers} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                </>}
-
-                <label>
-                <h2 className="text-xl font-semibold text-center">
-                    <input
-                        type="checkbox"
-                        name="callrepeater"
-                        checked={formData.callrepeater}
-                        onChange={handleChange}
-                    />    
-                Cell Repeater</h2></label>
-                <label>
-                <h2 className="text-xl font-semibold text-center">
-                    <input
-                        type="checkbox"
-                        name="rig"
-                        checked={formData.rig}
-                        onChange={handleChange}
-                    />    
-                Rig</h2></label>
-                <label>
-                <h2 className="text-xl font-semibold text-center">
-                    <input
-                        type="checkbox"
-                        name="tower"
-                        checked={formData.tower}
-                        onChange={handleChange}
-                    />    
-                Tower</h2></label>
-                {(formData.callrepeater || formData.rig || formData.tower) &&
-                <>
-                    <label><input type="checkbox" name="monitored_YN" placeholder="Monitored (Y/N)" value={formData.monitored_YN} onChange={handleChange} className="w-full shared-input p-2 border rounded" />Monitored</label>
-                    <br/>
-                    <input name="lsd" placeholder="Surface LSD" value={formData.lsd} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="donor_azimuth" placeholder="Donor Azimuth" value={formData.donor_azimuth} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="area_fill_azimuth" placeholder="Area Fill Azimuth" value={formData.area_fill_azimuth} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="cell_frequency" placeholder="Cell Frequency (850/1960)" value={formData.cell_frequency} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <br/>
-                    <input name="uplink" placeholder="Uplink (dB)" value={formData.uplink} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="downlink" placeholder="Downlink (dB)" value={formData.downlink} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="rssi_inside" placeholder="RSSI Inside (dBm)" value={formData.rssi_inside} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="rssi_outside" placeholder="RSSI Outside (dBm)" value={formData.rssi_outside} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                    <input name="shack_boosters" placeholder="# of Shack Boosters" value={formData.shack_boosters} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                </>}
-
-                <label>
-                <h2 className="text-xl font-semibold text-center">
-                    <input
-                        type="checkbox"
-                        name="hotshot"
-                        checked={formData.hotshot}
-                        onChange={handleChange}
-                    />    
-                Hotshot</h2></label>
-                <label>
-                <h2 className="text-xl font-semibold text-center">
-                    <input
-                        type="checkbox"
-                        name="laptoppackage"
-                        checked={formData.laptoppackage}
-                        onChange={handleChange}
-                    />    
-                Laptop Package</h2></label>
-                {(formData.hotshot || formData.laptoppackage) &&
-                <>
-                <label><input type="checkbox" name="pkg_picked_up" placeholder="Pkg Picked Up (Y/N)" value={formData.pkg_picked_up} onChange={handleChange} className="w-full shared-input p-2 border rounded" />Pkg Picked Up</label><br/>
-                <label><input type="checkbox" name="pkg_scanned_truck" placeholder="Pkg Scanned to Truck (Y/N)" value={formData.pkg_scanned_truck} onChange={handleChange} className="w-full shared-input p-2 border rounded" />Pkg Scanned to Truck</label><br/>
-                <label><input type="checkbox" name="pkg_scanned_emp" placeholder="Pkg Scanned to EmpNo (Y/N)" value={formData.pkg_scanned_emp} onChange={handleChange} className="w-full shared-input p-2 border rounded" />Pkg Scanned to EmpNo</label><br/>
-                <label><input type="checkbox" name="pkg_delivered" placeholder="Pkg Delivered (Y/N)" value={formData.pkg_delivered} onChange={handleChange} className="w-full shared-input p-2 border rounded" />Pkg Delivered</label><br/>
-                <label><input type="checkbox" name="pkg_set_up" placeholder="Pkg Set Up (Y/N)" value={formData.pkg_set_up} onChange={handleChange} className="w-full shared-input p-2 border rounded" />Pkg Set Up</label>
-                </>}
-
-                <h2 className="text-xl font-semibold text-center">Notes</h2>
-                <textarea name="notes" placeholder="Notes" style={{width: '551px', height: '123px'}} value={formData.notes} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                
-                <h2 className="text-xl font-semibold text-center">Completed By</h2>
-                <input name="completed_by" placeholder="Completed By" value={formData.completed_by} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                <input name="ticket_no" placeholder="Ticket #" value={formData.ticket_no} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
-                
                 <br/>
+
+                <h2>Signature</h2>
+                <SignatureCanvas penColor='blue' ref={sigCanvas} onEnd={handleStrokeEnd} canvasProps={{className: 'sigCanvas'}} />
+
                 <br/>
+                <button 
+                type='button'
+                onClick={handleClick}
+                style={{width: '100%', height: '40px'}}
+                >
+                    download
+                </button>
             </form>
             <br/>
-            <button 
-            onClick={handleClick}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
-                download
-            </button>
             <br/>
             <br/>
             <div className="App" id="pdf-container" style={{
@@ -457,7 +747,7 @@ function App() {
                 <p className="shared-text" style={{top: '192px', left: '204px'}}>{formatToTwoDecimals(formData.milage_rate)}</p>
                 <p className="shared-text" style={{top: '195px', left: '360px'}}>{formatToTwoDecimals(parseFloat(formData.milage) * parseFloat(formData.milage_rate))}</p>
                 <p className="shared-text" style={{top: '195px', left: '484px'}}>{formatToTwoDecimals(formData.labor_cost)}</p>
-                <p className="shared-text" style={{top: '195px', left: '650px'}}>{formatToTwoDecimals(parseFloat(formData.labor_cost) + (parseFloat(formData.milage) * parseFloat(formData.milage_rate)))}</p>
+                <p className="shared-text" style={{top: '195px', left: '650px'}}>{formatToTwoDecimals(parseFloat(formData.labor_cost) + (parseFloat(formData.milage || 0) * parseFloat(formData.milage_rate)))}</p>
 
                 {formData.cameras && <>
                 <input type="checkbox" className="shared-text" checked={true} style={{top: '238px', left: '84px', width: '12px'}}/>
@@ -544,7 +834,7 @@ function App() {
                 <p className="shared-text" style={{top: '765px', left: '520px', width: '300px'}}>{formData.completed_by}</p>
                 <p className="shared-text" style={{top: '1040px', left: '356px', width: '300px', fontSize: '26px', fontFamily: 'Times New Roman', color: '#333333'}}>{formData.ticket_no}</p>
 
-                <SignatureCanvas penColor='blue' canvasProps={{className: 'sigCanvas'}} />
+                <SignatureCanvas penColor='blue' ref={duplicateCanvas} canvasProps={{className: 'sigCanvas2'}} />
             </div>
         </>
     );

@@ -46,18 +46,79 @@
     text-wrap: balance;
 }
 
-.shared-input {
+/* .shared-input {
     margin-right: 10px;
-     margin-bottom: 10px;
-}
+    margin-bottom: 10px;
+} */
 
 h2 {
     line-height: 0px;
 }
 
 .sigCanvas {
+    width: 370px;
+    height: 260px;
+    outline: 1px solid grey;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sigCanvas2 {
     position: absolute;
     top: 804px;
     width: 370px;
     height: 260px;
+}
+
+.shared-input {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s ease;
+  width: 100%;
+  line-height: 32px;
+  border-radius: 5px;
+}
+
+.shared-input:focus {
+  border-color: #3182ce; /* blue */
+  outline: none;
+  box-shadow: 0 0 5px rgba(49, 130, 206, 0.5);
+}
+
+h2 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  color: #2d3748; /* dark gray */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+label {
+  font-weight: 500;
+  color: #4a5568; /* medium gray */
+  cursor: pointer;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  cursor: pointer;
+  transform: scale(1.2);
+  margin-right: 8px;
+}
+
+textarea {
+  resize: vertical;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #f7fafc; /* light gray */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
 }
