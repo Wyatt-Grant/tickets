@@ -54,3 +54,10 @@
 h2 {
     line-height: 0px;
 }
+
+.sigCanvas {
+    position: absolute;
+    top: 804px;
+    width: 370px;
+    height: 260px;
+}

@@ -2,6 +2,7 @@ import ticketScan from './ticket_scan.png';
 import './App.css';
 import html2pdf from 'html2pdf.js/dist/html2pdf.min.js';
 import React, { useState } from "react";
+import SignatureCanvas from 'react-signature-canvas'
 
 function App() {
     const [formData, setFormData] = useState({
@@ -382,7 +383,7 @@ function App() {
                 <input name="completed_by" placeholder="Completed By" value={formData.completed_by} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
                 <input name="ticket_no" placeholder="Ticket #" value={formData.ticket_no} onChange={handleChange} className="w-full shared-input p-2 border rounded" />
                 
-
+                <br/>
                 <br/>
             </form>
             <br/>
@@ -542,6 +543,8 @@ function App() {
                 <p className="shared-text" style={{top: '540px', left: '40px', width: '706px', whiteSpace: 'pre-wrap'}}>{formData.notes}</p>
                 <p className="shared-text" style={{top: '765px', left: '520px', width: '300px'}}>{formData.completed_by}</p>
                 <p className="shared-text" style={{top: '1040px', left: '356px', width: '300px', fontSize: '26px', fontFamily: 'Times New Roman', color: '#333333'}}>{formData.ticket_no}</p>
+
+                <SignatureCanvas penColor='blue' canvasProps={{className: 'sigCanvas'}} />
             </div>
         </>
     );
