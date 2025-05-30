@@ -660,17 +660,24 @@ function App() {
                 value={formData.completed_by}
                 onChange={handleChange}
                 />
-                <input
+                {/* <input
                 name="ticket_no"
                 placeholder="Ticket #"
                 className='shared-input'
                 value={formData.ticket_no}
                 onChange={handleChange}
-                />
+                /> */}
 
                 <br/>
 
                 <h2>Signature</h2>
+                <button 
+                type='button'
+                onClick={() => {sigCanvas.current.clear(); duplicateCanvas.current.clear()}}
+                style={{width: '60px', height: '20px'}}
+                >
+                    clear
+                </button>
                 <SignatureCanvas penColor='blue' ref={sigCanvas} onEnd={handleStrokeEnd} canvasProps={{className: 'sigCanvas'}} />
 
                 <br/>
@@ -693,14 +700,16 @@ function App() {
                 boxSizing: 'border-box',
                 backgroundImage: 'url('+ticketScan+')',
                 backgroundSize: '100% 100%',
-                position: 'relative'
+                position: 'relative',
+                marginLeft: 'auto',
+                marginRight: 'auto'
             }}>
                 <div
                 className="shared-text"
                 style={{
                     position: 'absolute',
                     top: '15px',
-                    left: '550px',
+                    left: '600px',
                     width: '120px',
                     display: 'flex',
                     flexDirection: 'column',
@@ -734,105 +743,105 @@ function App() {
 
                 <br/>
 
-                <p className="shared-text" style={{top: '139px', left: '56px'}}>{formatted}</p>
-                <p className="shared-text" style={{top: '142px', left: '232px'}}>{formData.ImNo}</p>
-                <p className="shared-text" style={{top: '143px', left: '390px'}}>{formData.site}</p>
-                <p className="shared-text" style={{top: '143px', left: '636px'}}>{formData.empNo}</p>
+                <p className="shared-text" style={{top: '150px', left: '58px'}}>{formatted}</p>
+                <p className="shared-text" style={{top: '150px', left: '233px'}}>{formData.ImNo}</p>
+                <p className="shared-text" style={{top: '150px', left: '391px'}}>{formData.site}</p>
+                <p className="shared-text" style={{top: '150px', left: '638px'}}>{formData.empNo}</p>
 
-                <p className="shared-text" style={{top: '165px', left: '79px'}}>{formData.contact}</p>
-                <p className="shared-text" style={{top: '168px', left: '278px'}}>{formData.phone}</p>
-                <p className="shared-text" style={{top: '170px', left: '466px'}}>{formData.email}</p>
+                <p className="shared-text" style={{top: '169px', left: '80px'}}>{formData.contact}</p>
+                <p className="shared-text" style={{top: '169px', left: '279px'}}>{formData.phone}</p>
+                <p className="shared-text" style={{top: '169px', left: '467px'}}>{formData.email}</p>
 
-                <p className="shared-text" style={{top: '191px', left: '78px'}}>{formData.milage}</p>
-                <p className="shared-text" style={{top: '192px', left: '204px'}}>{formatToTwoDecimals(formData.milage_rate)}</p>
-                <p className="shared-text" style={{top: '195px', left: '360px'}}>{formatToTwoDecimals(parseFloat(formData.milage) * parseFloat(formData.milage_rate))}</p>
-                <p className="shared-text" style={{top: '195px', left: '484px'}}>{formatToTwoDecimals(formData.labor_cost)}</p>
-                <p className="shared-text" style={{top: '195px', left: '650px'}}>{formatToTwoDecimals(parseFloat(formData.labor_cost) + (parseFloat(formData.milage || 0) * parseFloat(formData.milage_rate)))}</p>
+                <p className="shared-text" style={{top: '188px', left: '78px'}}>{formData.milage}</p>
+                <p className="shared-text" style={{top: '188px', left: '208px'}}>{formatToTwoDecimals(formData.milage_rate)}</p>
+                <p className="shared-text" style={{top: '188px', left: '362px'}}>{formatToTwoDecimals(parseFloat(formData.milage) * parseFloat(formData.milage_rate))}</p>
+                <p className="shared-text" style={{top: '188px', left: '486px'}}>{formatToTwoDecimals(formData.labor_cost)}</p>
+                <p className="shared-text" style={{top: '188px', left: '652px'}}>{formatToTwoDecimals(parseFloat(formData.labor_cost) + (parseFloat(formData.milage || 0) * parseFloat(formData.milage_rate)))}</p>
 
                 {formData.cameras && <>
-                <input type="checkbox" className="shared-text" checked={true} style={{top: '238px', left: '84px', width: '12px'}}/>
-                <p className="shared-text" style={{top: '240px', left: '112px'}}>{formData.AWC_kits}</p>
-                <p className="shared-text" style={{top: '255px', left: '92px'}}>{formData.ptz}</p>
-                <p className="shared-text" style={{top: '274px', left: '126px'}}>{formData.stationaries}</p>
+                <input type="checkbox" className="shared-text" checked={true} style={{top: '235px', left: '85px', width: '12px'}}/>
+                <p className="shared-text" style={{top: '236px', left: '114px'}}>{formData.AWC_kits}</p>
+                <p className="shared-text" style={{top: '253px', left: '94px'}}>{formData.ptz}</p>
+                <p className="shared-text" style={{top: '271px', left: '128px'}}>{formData.stationaries}</p>
                 </>}
 
                 {(formData.generator || formData.lights) && <>
                 {formData.generator &&
-                <input type="checkbox" className="shared-text" checked={true} style={{top: '481px', left: '98px', width: '12px'}}/>}
+                <input type="checkbox" className="shared-text" checked={true} style={{top: '478px', left: '99px', width: '12px'}}/>}
                 {formData.lights &&
-                <input type="checkbox" className="shared-text" checked={true} style={{top: '481px', left: '156px', width: '12px'}}/>}
-                <p className="shared-text" style={{top: '483px', left: '130px'}}>{formData.gen_hours}</p>
-                <p className="shared-text" style={{top: '501px', left: '226px'}}>{formData.gen_maint_complete ? "Yes" : "No"}</p>
+                <input type="checkbox" className="shared-text" checked={true} style={{top: '478px', left: '157px', width: '12px'}}/>}
+                <p className="shared-text" style={{top: '480px', left: '131px'}}>{formData.gen_hours}</p>
+                <p className="shared-text" style={{top: '497px', left: '228px'}}>{formData.gen_maint_complete ? "Yes" : "No"}</p>
                 </>}
 
                 {(formData.rigphones) && <>
-                <input type="checkbox" className="shared-text" checked={true} style={{top: '240px', left: '347px', width: '12px'}}/>
-                <p className="shared-text" style={{top: '241px', left: '350px', }}>{formData.AWP_kits}</p>
-                <p className="shared-text" style={{top: '259px', left: '394px'}}>{formData.doghouse_phones}</p>
-                <p className="shared-text" style={{top: '275px', left: '371px'}}>{formData.shack_phones}</p>
-                <p className="shared-text" style={{top: '292px', left: '348px'}}>{formData.total_lines}</p>
-                <p className="shared-text" style={{top: '311px', left: '400px'}}>{formData.lines_tested_YN ? "Yes" : "No"}</p>
+                <input type="checkbox" className="shared-text" checked={true} style={{top: '235px', left: '349px', width: '12px'}}/>
+                <p className="shared-text" style={{top: '237px', left: '352px', }}>{formData.AWP_kits}</p>
+                <p className="shared-text" style={{top: '255px', left: '396px'}}>{formData.doghouse_phones}</p>
+                <p className="shared-text" style={{top: '271px', left: '373px'}}>{formData.shack_phones}</p>
+                <p className="shared-text" style={{top: '288px', left: '350px'}}>{formData.total_lines}</p>
+                <p className="shared-text" style={{top: '306px', left: '404px'}}>{formData.lines_tested_YN ? "Yes" : "No"}</p>
                 </>}
 
 
                 {(formData.wifi || formData.intercom) && <>
                 {formData.wifi &&
-                <input type="checkbox" className="shared-text" checked={true} style={{top: '343px', left: '305px', width: '12px'}}/>}
+                <input type="checkbox" className="shared-text" checked={true} style={{top: '338px', left: '307px', width: '12px'}}/>}
                 {formData.intercom &&
-                <input type="checkbox" className="shared-text" checked={true} style={{top: '343px', left: '383px', width: '12px'}}/>}
-                <p className="shared-text" style={{top: '344px', left: '358px'}}>{formData.primary_kit}</p>
-                <p className="shared-text" style={{top: '362px', left: '370px'}}>{formData.outdoor_APs}</p>
-                <p className="shared-text" style={{top: '380px', left: '362px'}}>{formData.indoor_APs}</p>
-                <p className="shared-text" style={{top: '397px', left: '367px'}}>{formData.wifi_APs}</p>
-                <p className="shared-text" style={{top: '416px', left: '414px'}}>{formData.devices_tested_YN ? "Yes" : "No"}</p>
+                <input type="checkbox" className="shared-text" checked={true} style={{top: '338px', left: '387px', width: '12px'}}/>}
+                <p className="shared-text" style={{top: '339px', left: '362px'}}>{formData.primary_kit}</p>
+                <p className="shared-text" style={{top: '357px', left: '374px'}}>{formData.outdoor_APs}</p>
+                <p className="shared-text" style={{top: '375px', left: '366px'}}>{formData.indoor_APs}</p>
+                <p className="shared-text" style={{top: '392px', left: '371px'}}>{formData.wifi_APs}</p>
+                <p className="shared-text" style={{top: '411px', left: '418px'}}>{formData.devices_tested_YN ? "Yes" : "No"}</p>
                 </>}
 
 
                 {(formData.radios) && <>
-                <input type="checkbox" className="shared-text" checked={true} style={{top: '448px', left: '322px', width: '12px'}}/>
-                <p className="shared-text" style={{top: '449px', left: '359px'}}>{formData.portable}</p>
-                <p className="shared-text" style={{top: '468px', left: '360px'}}>{formData.batteries}</p>
-                <p className="shared-text" style={{top: '485px', left: '377px'}}>{formData.truck_shack}</p>
-                <p className="shared-text" style={{top: '502px', left: '360px'}}>{formData.chargers}</p>
+                <input type="checkbox" className="shared-text" checked={true} style={{top: '443px', left: '324px', width: '12px'}}/>
+                <p className="shared-text" style={{top: '446px', left: '363px'}}>{formData.portable}</p>
+                <p className="shared-text" style={{top: '464px', left: '364px'}}>{formData.batteries}</p>
+                <p className="shared-text" style={{top: '481px', left: '381px'}}>{formData.truck_shack}</p>
+                <p className="shared-text" style={{top: '497px', left: '364px'}}>{formData.chargers}</p>
                 </>}
 
 
                 {(formData.callrepeater || formData.rig || formData.tower) && <>
                 {formData.callrepeater &&
-                <input type="checkbox" className="shared-text" checked={true} style={{top: '242px', left: '610px', width: '12px'}}/>}
+                <input type="checkbox" className="shared-text" checked={true} style={{top: '235px', left: '614px', width: '12px'}}/>}
                 {formData.rig &&
-                <input type="checkbox" className="shared-text" checked={true} style={{top: '242px', left: '650px', width: '12px'}}/>}
+                <input type="checkbox" className="shared-text" checked={true} style={{top: '235px', left: '654px', width: '12px'}}/>}
                 {formData.tower &&
-                <input type="checkbox" className="shared-text" checked={true} style={{top: '243px', left: '710px', width: '12px'}}/>}
-                <p className="shared-text" style={{top: '243px', left: '628px'}}>{formData.monitored_YN ? "Yes" : "No"}</p>
-                <p className="shared-text" style={{top: '260px', left: '601px'}}>{formData.lsd}</p>
-                <p className="shared-text" style={{top: '277px', left: '620px'}}>{formData.donor_azimuth}</p>
-                <p className="shared-text" style={{top: '294px', left: '630px'}}>{formData.area_fill_azimuth}</p>
-                <p className="shared-text" style={{top: '312px', left: '678px'}}>{formData.cell_frequency}</p>
-                <p className="shared-text" style={{top: '330px', left: '599px'}}>{formData.uplink}</p>
-                <p className="shared-text" style={{top: '347px', left: '613px'}}>{formData.downlink}</p>
-                <p className="shared-text" style={{top: '364px', left: '630px'}}>{formData.rssi_inside}</p>
-                <p className="shared-text" style={{top: '381px', left: '640px'}}>{formData.rssi_outside}</p>
-                <p className="shared-text" style={{top: '399px', left: '628px'}}>{formData.shack_boosters}</p>
+                <input type="checkbox" className="shared-text" checked={true} style={{top: '235px', left: '715px', width: '12px'}}/>}
+                <p className="shared-text" style={{top: '237px', left: '632px'}}>{formData.monitored_YN ? "Yes" : "No"}</p>
+                <p className="shared-text" style={{top: '254px', left: '605px'}}>{formData.lsd}</p>
+                <p className="shared-text" style={{top: '271px', left: '624px'}}>{formData.donor_azimuth}</p>
+                <p className="shared-text" style={{top: '288px', left: '634px'}}>{formData.area_fill_azimuth}</p>
+                <p className="shared-text" style={{top: '306px', left: '682px'}}>{formData.cell_frequency}</p>
+                <p className="shared-text" style={{top: '324px', left: '603px'}}>{formData.uplink}</p>
+                <p className="shared-text" style={{top: '341px', left: '617px'}}>{formData.downlink}</p>
+                <p className="shared-text" style={{top: '358px', left: '634px'}}>{formData.rssi_inside}</p>
+                <p className="shared-text" style={{top: '375px', left: '644px'}}>{formData.rssi_outside}</p>
+                <p className="shared-text" style={{top: '392px', left: '632px'}}>{formData.shack_boosters}</p>
                 </>}
 
 
                 {(formData.hotshot || formData.laptoppackage) && <>
                 {formData.hotshot &&
-                <input type="checkbox" className="shared-text" checked={true} style={{top: '432px', left: '583px', width: '12px'}}/>}
+                <input type="checkbox" className="shared-text" checked={true} style={{top: '425px', left: '587px', width: '12px'}}/>}
                 {formData.laptoppackage &&
-                <input type="checkbox" className="shared-text" checked={true} style={{top: '434px', left: '673px', width: '12px'}}/>}
-                <p className="shared-text" style={{top: '433px', left: '644px'}}>{formData.pkg_picked_up ? "Yes" : "No"}</p>
-                <p className="shared-text" style={{top: '451px', left: '680px'}}>{formData.pkg_scanned_truck ? "Yes" : "No"}</p>
-                <p className="shared-text" style={{top: '469px', left: '690px'}}>{formData.pkg_scanned_emp ? "Yes" : "No"}</p>
-                <p className="shared-text" style={{top: '486px', left: '641px'}}>{formData.pkg_delivered ? "Yes" : "No"}</p>
-                <p className="shared-text" style={{top: '503px', left: '627px'}}>{formData.pkg_set_up ? "Yes" : "No"}</p>
+                <input type="checkbox" className="shared-text" checked={true} style={{top: '425px', left: '678px', width: '12px'}}/>}
+                <p className="shared-text" style={{top: '427px', left: '648px'}}>{formData.pkg_picked_up ? "Yes" : "No"}</p>
+                <p className="shared-text" style={{top: '445px', left: '684px'}}>{formData.pkg_scanned_truck ? "Yes" : "No"}</p>
+                <p className="shared-text" style={{top: '463px', left: '694px'}}>{formData.pkg_scanned_emp ? "Yes" : "No"}</p>
+                <p className="shared-text" style={{top: '480px', left: '645px'}}>{formData.pkg_delivered ? "Yes" : "No"}</p>
+                <p className="shared-text" style={{top: '497px', left: '631px'}}>{formData.pkg_set_up ? "Yes" : "No"}</p>
                 </>}
 
 
                 <p className="shared-text" style={{top: '540px', left: '40px', width: '706px', whiteSpace: 'pre-wrap'}}>{formData.notes}</p>
-                <p className="shared-text" style={{top: '765px', left: '520px', width: '300px'}}>{formData.completed_by}</p>
-                <p className="shared-text" style={{top: '1040px', left: '356px', width: '300px', fontSize: '26px', fontFamily: 'Times New Roman', color: '#333333'}}>{formData.ticket_no}</p>
+                <p className="shared-text" style={{top: '772px', left: '524px', width: '300px'}}>{formData.completed_by}</p>
+                {/* <p className="shared-text" style={{top: '1040px', left: '356px', width: '300px', fontSize: '26px', fontFamily: 'Times New Roman', color: '#333333'}}>{formData.ticket_no}</p> */}
 
                 <SignatureCanvas penColor='blue' ref={duplicateCanvas} canvasProps={{className: 'sigCanvas2'}} />
             </div>
